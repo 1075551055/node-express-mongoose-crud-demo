@@ -4,14 +4,15 @@
 const express = require('express')
     , path = require('path')
     , db = require('./app/models/db')
+    //todo read model by fs.readdirSync
     // , User = require('./app/models/user')
     , app = express()
 
 /**
  * bootstraps routes and express.js
  */
-require('./config/routes/userRoute')(app)
 require('./config/express')(app)
+require('./config/routes/userRoute')(app)
 
 /**
  * app start once db connection open

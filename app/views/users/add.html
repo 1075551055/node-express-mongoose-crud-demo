@@ -5,14 +5,18 @@
     <title>index</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
-
 </head>
 <body>
 
 <div class="container">
+    <div id="errorDiv" class="alert alert-danger text-hide"></div>
+    <script id="errorMsg" type="text/html">
+        {{error}}
+    </script>
+
     <form id="userForm" method="post">
         <div class="form-group">
-            <label for="userName">userName</label>
+            <label for="userName">User Name</label>
             <input type="text" class="form-control" name="userName" id="userName" placeholder="userName">
         </div>
         <div class="form-group">
@@ -21,27 +25,15 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
 </div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Bootstrap JS -->
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<script>
-    $('#userForm').submit(function (e) {
-        e.preventDefault();
-        //模板表达式，可以在里面执行js代码
-        // console.log(`${$('#userForm').serialize()} test`);
-        var url = '/user';
-        $.ajax(url, {
-            type: 'post',
-            dataType: 'json',
-            data: $('#userForm').serialize(),
-            success: function (data) {
-                console.log(data);
-            }
-        });
-    })
-</script>
+<!--art-template-->
+<script src="/node_modules/art-template/lib/template-web.js"></script>
+<script src="/public/js/user.js"></script>
 </body>
 </html>
