@@ -7,6 +7,8 @@ The is a crud demo node.js application that is with a fine touch of best practic
   + controllers
   + models
     - user.js
+  + utils
+    - index.js
   + views
 * config
   + env
