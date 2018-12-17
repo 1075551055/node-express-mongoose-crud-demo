@@ -27,8 +27,9 @@ function addUser() {
             },
             data: $('#userForm').serialize(),
             success: function (data) {
-                $('#errorDiv').addClass('text-hide');
-                alert(data.success);
+                if (data.success){
+                    location = '/';
+                }
             },
             error: function (xhr, textStatus, errorThrown) {
                 var errorHtml = template('errorMsg', xhr.responseJSON);

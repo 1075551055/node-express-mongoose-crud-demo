@@ -3,26 +3,34 @@ const User = require('../models/user');
 const {respond} = require('../utils');
 const path = require('path');
 exports.index = function (req, res) {
-    res.render('users/index', {
-        title: 'CRUD demo'
+    User.list(function (err, users) {
+        userList = users;
+        if (err){
+            return respond(res, 'users/index', {
+                error: 'get user data failed'
+            } )
+        }
+        res.render('users/index', {
+            title: 'CRUD demo',
+            users: users
+        })
     })
+
 }
 
 exports.create = function (req, res) {
     const user = new User(req.body);
     user.save(function (err, user) {
         console.log(req.body);
-        if (!err) {
-            console.log('create user successfully!');
-            respond(res, 'users/add',{
-                success: 'create user successfully!'
-            }, 200)
-        }else {
-            console.log('create user failed!');
-            respond(res,  'users/add',{
+        if (err) {
+            return respond(res,  'users/add',{
                 error: err.toString()
             }, 422)
+
         }
+        respond(res, 'users/add',{
+            success: 'create user successfully!'
+        }, 200)
     })
 }
 

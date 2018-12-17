@@ -31,6 +31,12 @@ UserSchema.methods = {
     // }
 };
 
+UserSchema.statics = {
+    list: function (callBack) {
+        return this.find({}, callBack);
+    }
+}
+
 // Important! (https://www.npmjs.com/package/mongoose)
 // If you opened a separate connection using mongoose.createConnection() but attempt to access
 // the model through mongoose.model('ModelName') it will not work as expected since it is
