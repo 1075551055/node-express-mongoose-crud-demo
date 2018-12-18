@@ -1,5 +1,6 @@
 module.exports = {
-    respond: respond
+    respond: respond,
+    redirect: redirect
 }
 function respond(res, template, templateData, status) {
     // http://expressjs.com/zh-cn/api.html#res.format
@@ -14,6 +15,15 @@ function respond(res, template, templateData, status) {
         },
         default: function () {
             res.status(406).send('Not Acceptable');
+        }
+    })
+}
+
+function redirect(res, url = '/') {
+    res.format({
+        //todo add connect-flash
+        html: () => {
+            res.redirect(url);
         }
     })
 }
