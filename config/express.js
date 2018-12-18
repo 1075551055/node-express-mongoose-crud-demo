@@ -4,7 +4,8 @@
 const bodyParser = require('body-parser'),
     express = require('express'),
     path = require('path'),
-    config = require('./index')
+    config = require('./index'),
+    methodOverride = require('method-override')
 
 module.exports = function (app) {
     // 1.If want to access the static resources, must expose them, or it will occur 'cannot get 404' error
@@ -26,7 +27,19 @@ module.exports = function (app) {
 
     //解析请求的数据，需要使用body-parser，否则获取不到data
     app.use(bodyParser.json()); // for parsing application/json
+    // NOTE: when using req.body, you must fully parse the request body
+    //  before you call methodOverride() in your middleware stack,
+    //  otherwise req.body will not be populated.
     app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
+    app.use(methodOverride(function (req, res) {
+        if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+            // look in urlencoded POST bodies and delete it
+            var method = req.body._method
+            delete req.body._method
+            return method
+        }
+    }))
+
 
     /**
     *Redirect middleware
