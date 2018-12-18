@@ -39,6 +39,8 @@ module.exports = function (app) {
             return method
         }
     }))
+    //for ajax DELETE method
+    app.use(methodOverride('X-HTTP-Method-Override'));
 
 
     /**
