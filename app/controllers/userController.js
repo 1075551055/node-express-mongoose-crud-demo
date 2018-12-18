@@ -1,6 +1,6 @@
 //todo why require('/app/models/user') meet error?
 const User = require('../models/user');
-const {respond,redirect} = require('../utils');
+const {respond,respondOrRedirect} = require('../utils');
 const path = require('path');
 const {wrap: async} = require('co');
 
@@ -62,13 +62,20 @@ exports.update = async(function* (req, res) {
     user = Object.assign(user, req.body);
     try {
         yield user.saveOrUpdate();
-        redirect(res,'/');
+        respondOrRedirect(res,'/');
     }catch (err) {
         //todo using connect-flash
         respond(res, `users/${user.id}/edit`, {
             error: err.toString()
         })
     }
+})
+
+exports.destroy = async(function* (req, res) {
+    yield req.user.remove();
+    respondOrRedirect(res, '/', {
+        success: true
+    });
 })
 
 // exports.add = function(req, res) {

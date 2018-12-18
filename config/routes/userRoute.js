@@ -4,12 +4,14 @@ module.exports = function (app) {
     //todo: Router using
     //app.get, post, put, delete will call app.use, they are route middleware.
     app.get('/', userController.index);
-    // app.get('/users/add', userController.add);
+
     app.post('/users', userController.create);
 
     app.get('/users/:id/edit', userController.edit);
-
+    //todo add authorization
     app.put('/users/:id', userController.update);
+
+    app.delete('/users/:id', userController.destroy);
 
     //global error handler middleware: must has 4 params, when call next(error) in other middleware,
     // it will turn into this middleware and skip other middleware for the same request url

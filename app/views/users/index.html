@@ -27,14 +27,14 @@
         </thead>
         <tbody>
             {{each users value i}}
-            <tr>
+            <tr id="{{value.id}}">
                 <td>{{value.userName}}</td>
                 <td>{{value.emailAddress}}</td>
                 <td>
                     <!--use value.id, not value._id, if it will contains double quote -->
                     <a href="/users/{{value.id}}/edit">edit</a>
                     &nbsp; &nbsp; &nbsp;
-                    <a href="#">delete</a>
+                    <a href="" onclick="deleteUser(event, '{{value.id}}')">delete</a>
                 </td>
             </tr>
             {{/each}}
@@ -46,7 +46,7 @@
 <!-- jQuery first, then Bootstrap JS -->
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<!--art-template-->
-<script src="/node_modules/art-template/lib/template-web.js"></script>
+<!--todo add header and footer common html to adjust the js file import-->
+<script src="/public/js/user.js"></script>
 </body>
 </html>

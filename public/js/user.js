@@ -39,3 +39,23 @@ function addUser() {
         });
     })
 }
+
+function deleteUser(event, id) {
+    event.preventDefault();
+    $.ajax(`/users/${id}`,{
+        type:'post',
+        headers:{
+            'X-HTTP-Method-Override': 'DELETE',
+            Accept: 'application/json'
+        },
+        success: function (data) {
+            if (data.success == true){
+                alert('delete successfully');
+                $('#' + id).remove();
+            }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.log(errorThrown);
+        }
+    })
+}

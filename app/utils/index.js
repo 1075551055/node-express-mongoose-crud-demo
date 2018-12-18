@@ -1,6 +1,6 @@
 module.exports = {
     respond: respond,
-    redirect: redirect
+    respondOrRedirect: respondOrRedirect
 }
 function respond(res, template, templateData, status) {
     // http://expressjs.com/zh-cn/api.html#res.format
@@ -19,11 +19,14 @@ function respond(res, template, templateData, status) {
     })
 }
 
-function redirect(res, url = '/') {
+function respondOrRedirect(res, url = '/', obj = {}) {
     res.format({
         //todo add connect-flash
         html: () => {
             res.redirect(url);
+        },
+        json: () => {
+            res.json(obj);
         }
     })
 }
