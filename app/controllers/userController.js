@@ -34,6 +34,8 @@ exports.index = function (req, res) {
 
 exports.create = function (req, res) {
     const user = new User(req.body);
+    //will call model validation before save to db, if validation not pass, will return err,
+    //can change it to be like saveOrUpdate method: first do the validation in model and then throw error to controller
     user.save(function (err, user) {
         console.log(req.body);
         if (err) {
