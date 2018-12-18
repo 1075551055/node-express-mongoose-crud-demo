@@ -1,12 +1,26 @@
 //todo why require('/app/models/user') meet error?
 const User = require('../models/user');
-const {respond} = require('../utils');
+const {respond,redirect} = require('../utils');
 const path = require('path');
+const {wrap: async} = require('co');
+
+exports.load = async(function* (req, res, next, id){
+    try {
+        console.log("param method coming!!!");
+        req.user = yield User.load(id);
+        if (!req.user) return next(new Error('User not found'));
+    }catch (err) {
+        return next(err);
+    }
+    next();
+})
+
 exports.index = function (req, res) {
     User.list(function (err, users) {
         userList = users;
         if (err){
             return respond(res, 'users/index', {
+                //todo connect-flash
                 error: 'get user data failed'
             } )
         }
@@ -33,6 +47,27 @@ exports.create = function (req, res) {
         }, 200)
     })
 }
+
+exports.edit = function(req, res){
+    // JSON.parse(req.user); cannot parse, it is not a standard json str
+    res.render('users/edit', {
+        user: req.user
+    });
+}
+
+exports.update = async(function* (req, res) {
+    var user = req.user;
+    user = Object.assign(user, req.body);
+    try {
+        yield user.saveOrUpdate();
+        redirect(res,'/');
+    }catch (err) {
+        //todo using connect-flash
+        respond(res, `users/${user.id}/edit`, {
+            error: err.toString()
+        })
+    }
+})
 
 // exports.add = function(req, res) {
     //note: don't use render method if the page use art-template for browser,

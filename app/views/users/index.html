@@ -31,7 +31,8 @@
                 <td>{{value.userName}}</td>
                 <td>{{value.emailAddress}}</td>
                 <td>
-                    <a href="#">edit</a>
+                    <!--use value.id, not value._id, if it will contains double quote -->
+                    <a href="/users/{{value.id}}/edit">edit</a>
                     &nbsp; &nbsp; &nbsp;
                     <a href="#">delete</a>
                 </td>

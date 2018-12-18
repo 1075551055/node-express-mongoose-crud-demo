@@ -7,6 +7,7 @@ var UserSchema = new Schema({
         type: String,
         required: [true, 'why no user name?']
     },
+    //todo add validation
     emailAddress: {
         type: String
         // validate
@@ -29,9 +30,17 @@ UserSchema.methods = {
     //     if (err && err.toString()) throw new Error(err.toString());
     //
     // }
+    saveOrUpdate: function () {
+        const err = this.validateSync();
+        if (err && err.toString()) throw new Error(err.toString());
+        return this.save();
+    }
 };
 
 UserSchema.statics = {
+    load: function (_id) {
+        return this.findOne({_id});
+    },
     list: function (callBack) {
         return this.find({}, callBack);
     }
