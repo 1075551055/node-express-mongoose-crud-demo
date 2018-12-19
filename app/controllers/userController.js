@@ -20,7 +20,6 @@ exports.index = function (req, res) {
         userList = users;
         if (err){
             return respond(res, 'users/index', {
-                //todo connect-flash
                 error: 'get user data failed'
             } )
         }
@@ -62,9 +61,11 @@ exports.update = async(function* (req, res) {
     user = Object.assign(user, req.body);
     try {
         yield user.saveOrUpdate();
-        respondOrRedirect(res,'/');
+        respondOrRedirect(req, res,'/', {},{
+            type:'info',
+            text: 'update successfully'
+        });
     }catch (err) {
-        //todo using connect-flash
         respond(res, `users/${user.id}/edit`, {
             error: err.toString()
         })
@@ -73,7 +74,7 @@ exports.update = async(function* (req, res) {
 
 exports.destroy = async(function* (req, res) {
     yield req.user.remove();
-    respondOrRedirect(res, '/', {
+    respondOrRedirect(req,res, '', {
         success: true
     });
 })

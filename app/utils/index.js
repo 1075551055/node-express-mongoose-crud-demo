@@ -19,10 +19,10 @@ function respond(res, template, templateData, status) {
     })
 }
 
-function respondOrRedirect(res, url = '/', obj = {}) {
+function respondOrRedirect(req, res, url = '/', obj = {}, flash) {
     res.format({
-        //todo add connect-flash
         html: () => {
+            if (req && flash) req.flash(flash.type, flash.text);
             res.redirect(url);
         },
         json: () => {

@@ -5,9 +5,16 @@ const bodyParser = require('body-parser'),
     express = require('express'),
     path = require('path'),
     config = require('./index'),
-    methodOverride = require('method-override')
+    methodOverride = require('method-override'),
+    session = require('express-session'),
+    mongoStore = require('connect-mongo')(session),
+    flash = require('connect-flash'),
+    pkg = require('../package')
 
 module.exports = function (app) {
+    // http://expressjs.com/zh-cn/advanced/best-practice-security.html
+    app.disable('x-powered-by');
+
     // 1.If want to access the static resources, must expose them, or it will occur 'cannot get 404' error
     // 2.Call express middleware by 'app.use' method, the middleware can be understood as an encapsulated js function. From the client sending the request to the
     //  response stage, different middleware can be used to coordinate the completion of request process.
@@ -66,4 +73,26 @@ module.exports = function (app) {
     //default view path is 'views' which is in the same directory as server.js is
     app.set('views', path.join(config.root, 'app/views'))
 
+    // connect-flash. it depends on session, so need to config session
+    //todo add passport module for login. connect-flash & login session use the same session-id
+    app.use(session({
+        resave: false,
+        // rolling: true,
+        saveUninitialized: false,
+        secret: pkg.name,
+        // cookie: { path: '/', httpOnly: true, secure: false, maxAge: 1800000 },
+        store: new mongoStore({
+            // https://www.npmjs.com/package/connect-mongo
+            url: config.db,
+            collection : 'sessions',
+            touchAfter: 24 * 3600
+        })
+    }))
+    app.use(flash())
+    // set flash. User in ui with <%= errors%>
+    app.use(function (req, res, next) {
+        res.locals.errors = req.flash('error');
+        res.locals.infos = req.flash('info');
+        next();
+    });
 }
