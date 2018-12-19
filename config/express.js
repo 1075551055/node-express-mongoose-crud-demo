@@ -85,6 +85,7 @@ module.exports = function (app) {
             // https://www.npmjs.com/package/connect-mongo
             url: config.db,
             collection : 'sessions',
+            // setting touchAfter: 24 * 3600 you are saying to the session be updated only one time in a period of 24 hours, does not matter how many request's are made (with the exception of those that change something on the session data)
             touchAfter: 24 * 3600
         })
     }))
